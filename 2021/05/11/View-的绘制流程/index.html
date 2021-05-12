@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Work-Life balance">
+    <meta name="author" content="Lynch Lee">
+    
+    <title>
+        
+            View 的绘制流程 |
+        
+        Lynch&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/../images/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/css/font-awesome.min.css">
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"neeomaclynch.github.io","root":"/","language":"en","path":"search.json"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"../images/avatar.png","favicon":"../images/favicon.ico","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Work-Life balance."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"3.4.2"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            <a class="logo-title" href="/">
+                Lynch&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">View 的绘制流程</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/../images/avatar.png">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Lynch Lee</span>
+                        
+                            <span class="author-label">BIG_BOSS</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;2021-05-11 16:40:38
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Android/">Android</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/View/">View</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Android-advanced/">Android advanced</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>7 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p>虽然都说“面试造火箭，上班拧螺丝”，但是多看看源码和实现原理总归是好的。View 作为 Android 的基石之一，其绘制流程是非常重要的。小弟不才，在这里记录一下我对 <em>View 绘制流程</em> 的理解，未来等我理顺了可能还会写一篇事件分发机制的理解。本文会从基础的知识储备讲到各个绘制环节，文章包含的内容比较多，让我们开始吧！</p>
+<span id="more"></span>
+
+<h2 id="基础知识储备"><a href="#基础知识储备" class="headerlink" title="基础知识储备"></a>基础知识储备</h2><p>我们先来看几张图，首先是 Activity 视图架构图</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/Activity%E7%BB%93%E6%9E%84.62qkqslm8h80.svg"
+                     
+                ></p>
+<h3 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h3><p>Activity 不负责控制视图，它只负责控制生命周期并处理消息事件。控制视图的工作是由 Window 来完成的。一个 Activity 包含一个 Window ，Window 才是真正代表一个窗口，<strong>Activity 可以看作是这个窗口的控制器，负责视图的添加和现实，并通过其他回调方法，与 Window 及 View 进行交互</strong></p>
+<h3 id="Window"><a href="#Window" class="headerlink" title="Window"></a>Window</h3><p>Window 是视图的容器，其中持有一个 DecorView，DecorView 是 View 的根布局。Window 是一个抽象类，实际上 Activity 持有的是 <code>PhoneWindow</code> <code>这个子类。PhoneWindow</code> 中有一个内部类 <code>DecorView</code> ，通过创建 <code>DecorView</code> 来加载 Activity 中编写的 XML 布局。Window 通过 WindowManager 将 <code>DecorView</code> 加载到其中，并将 <code>DecorView</code> 交给 ViewRoot，进行视图绘制以及其他交互。</p>
+<h3 id="DecorView"><a href="#DecorView" class="headerlink" title="DecorView"></a>DecorView</h3><p><code>DecorView</code> 是 <code>FrameLayout</code> 的子类，它是 Android 视图树的根节点视图。其作为顶级 View，一般情况下内部包含一个垂直布局的 LinearLayout，这里简单来说有两个部分：一是标题栏；二是内容栏， 通过 setContentView 设置到其中，一般通过代码获取的 <code>content</code> 就是这里的 id 为 content 的 <code>FrameLayout</code>（这里 LinearLayout 中具体有些什么还是取决于系统版本）。</p>
+<h3 id="ViewRoot"><a href="#ViewRoot" class="headerlink" title="ViewRoot"></a>ViewRoot</h3><p>ViewRoot 的作用非常重要，这里的 <em>View 绘制</em> 和后面会提到的 <em>事件分发机制</em> 都是经由它来执行或者传递的。</p>
+<p>ViewRoot 对应 <code>ViewRootImpl</code> 类，它是连接 <code>WindowManagerService</code> 和 <code>DecorView</code> 的纽带，View 绘制的三大流程，即测量(measure)，布局(layout)，绘制(draw)都是由 ViewRoot 来完成。</p>
+<p>ViewRoot 不属于视图树的一部分。从源码上看，其既不是 <code>View</code> 的子类，也不是 <code>View</code> 的父类，但是它实现了 <code>ViewParent</code> 接口，所以还是可以把它看作是 View 的父视图。RootView 中存在一个内部类变量继承了 <code>Handler</code> 类，因此可以接收并分发事件，Android 中所有的触摸、按键、界面刷新事件都是由它进行分发的。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://upload-images.jianshu.io/upload_images/3985563-e773ab2cb83ad214.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/690/format/webp"
+                      alt="四者之间的复杂关系"
+                ></p>
+<p>DecorView 的源码我们暂且不细说了（我不会说是我还没看明白）。</p>
+<p>这里最后提一下 ViewRoot 对点击事件的分发，整个过程大致是：</p>
+<p>硬件 &rarr; ViewRootImpl &rarr; DecorView &rarr; PhoneWindow &rarr; Activity</p>
+<p>再往下就是 Android 的事件分发机制了，我们会在下篇文章中再来细说这部分。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>Activity 是控制器，负责控制 View 的生命周期并处理事件；Window 是 VIew 的容器；DecorView 是顶级View；ViewRoot 是连接器，连接用户与软件，是实现交互的桥梁。</p>
+<h2 id="绘制的基础框架"><a href="#绘制的基础框架" class="headerlink" title="绘制的基础框架"></a>绘制的基础框架</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://upload-images.jianshu.io/upload_images/3985563-5f3c64af676d9aee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/679/format/webp"
+                     
+                ></p>
+<p>View 绘制的顺序是 <code>DecorView</code> &rarr; <code>ViewGroup</code> * N &rarr; <code>View</code>，按照这个顺序依次往下，进行 measure（测量） &rarr; layout（布局） &rarr; draw（绘制）</p>
+<h2 id="Measure-流程"><a href="#Measure-流程" class="headerlink" title="Measure 流程"></a>Measure 流程</h2><p><strong>测量每个组件的大小</strong></p>
+<p>在 <code>measure()</code> 方法中对租价尺寸进行一下逻辑处理后，再调用 <code>onMeasure()</code> 方法通过 <code>setMeasuredDimension()</code> 设定 View 的尺寸信息，完成 View 的测量工作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">measure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">    setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),</span><br><span class="line">            getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看起来测量流程非常简单，但是 <code>widthMeasureSpec</code> 和 <code>heightMeasureSpec</code> 这两个重要的参数是怎么获得的？</p>
+<h3 id="MeasureSpec"><a href="#MeasureSpec" class="headerlink" title="MeasureSpec"></a>MeasureSpec</h3><p>首先 MeasureSpec 是一种<strong>测量规格</strong>，它是一个32位的 int 值。<br>它由占2个字节的测量模式 mode 作为 32 和 31 位，加上后30位的 size 表示具体的测量大小。</p>
+<p>测量模式分为三类：</p>
+<ul>
+<li>UNSPECIFIED ：不对 View 进行任何限制，要多大给多大，一般用于系统内部</li>
+<li>EXACTLY：对应 LayoutParams 中的 match_parent 和具体数值这两种模式。检测到View所需要的精确大小，这时候View的最终大小就是SpecSize所指定的值，</li>
+<li>AT_MOST ：对应 LayoutParams 中的 wrap_content。View 的大小不能大于父容器的大小。</li>
+</ul>
+<p>对于 DecorView 是通过屏幕大小和自身的布局参数 LayoutParams 确定其大小。</p>
+<p>对于其他 View 包括 ViewGroup 则是通过父布局的 MeasureSpec 和自身 LayoutParams 确定，这部分比较复杂，简单来说就是设定为 wrap_content 时 View 的大小不能超过父布局，因此需要重写 <code>onMeasure()</code> 方法处理这个情况。</p>
+<p>更具体的解析可以看看<a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/1dab927b2f36" >大佬的文章<i class="fas fa-external-link-alt"></i></a></p>
+<p>测量流程图（我真的不想画图了，那天有空了再复刻一个自己版本，就借用大佬的图吧）：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://upload-images.jianshu.io/upload_images/3985563-d1a57294428ff668.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/814/format/webp"
+                     
+                ></p>
+<p>这里要注意的是：ViewGroup 的测量是依赖于 View 的测量的，因为 ViewGroup 中是没有 <code>onMeasure()</code> 方法的，它的 <code>onMeasure()</code> 是一个抽象方法，需要每个子 View 根据自己的布局特性去实现。</p>
+<h2 id="Layout-流程"><a href="#Layout-流程" class="headerlink" title="Layout 流程"></a>Layout 流程</h2><p>测量完 View 后，就需要将其 <strong>布局</strong> 到 Window 上，Layout 主要是通过确定上下左右四个点来确定位置。</p>
+<p>Layout 也是从父容器到子组件的顺序，不同的是 <font color=red>ViewGroup 先在 <code>layout()</code> 中确定自己的布局，然后在 <code>onLayout()</code> 方法中再调用子 View 的 <code>layout()</code> 方法，让子 View Layout 出来</font>。在 Measure 过程中，就如上面一节提到的，ViewGroup 一般是先测量子 View 的大小，然后再确定自身的大小。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">layout</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> oldL = mLeft;</span><br><span class="line">    <span class="keyword">int</span> oldT = mTop;</span><br><span class="line">    <span class="keyword">int</span> oldB = mBottom;</span><br><span class="line">    <span class="keyword">int</span> oldR = mRight;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// setOpticalFrame() 和 setFrame() 确定 View 自身位置</span></span><br><span class="line">    <span class="comment">// 确定四个点的位置并检查位置是否发生变化</span></span><br><span class="line">    <span class="keyword">boolean</span> changed = isLayoutModeOptical(mParent) ?</span><br><span class="line">            setOpticalFrame(l, t, r, b) : setFrame(l, t, r, b);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果视图大小或者位置发生变化就调用 onLayout() </span></span><br><span class="line">    <span class="keyword">if</span> (changed || (mPrivateFlags &amp; PFLAG_LAYOUT_REQUIRED) == PFLAG_LAYOUT_REQUIRED) &#123;</span><br><span class="line">        <span class="comment">// 确定该 View 中的所有子 View 在父容器中的位置</span></span><br><span class="line">        onLayout(changed, l, t, r, b);</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>onLayout()</code> 是一个空方法，只有当前 View 有子 View （即 ViewGroup）时才要实现这个方法，特别是自定义 View 时需要通过重写这个方法实现特定的效果。</p>
+<p>布局流程图：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://upload-images.jianshu.io/upload_images/3985563-8aefac42b3912539.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1019/format/webp"
+                     
+                ></p>
+<h2 id="Draw-流程"><a href="#Draw-流程" class="headerlink" title="Draw 流程"></a>Draw 流程</h2><p>绘制的过程如下：</p>
+<ol>
+<li>绘制背景 <code>drawBackground(canvas)</code></li>
+<li>绘制自己 <code>onDraw(canvas)</code></li>
+<li>绘制 Children <code>dispatchDraw(canvas)</code></li>
+<li>绘制装饰 <code>onDrawForeground(canvas)</code></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    drawBackground(canvas);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果有必要，就保存图层（还有一个复原图层）</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> viewFlags = mViewFlags;</span><br><span class="line">    <span class="keyword">boolean</span> horizontalEdges = (viewFlags &amp; FADING_EDGE_HORIZONTAL) != <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> verticalEdges = (viewFlags &amp; FADING_EDGE_VERTICAL) != <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (!verticalEdges &amp;&amp; !horizontalEdges) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 3, draw the content</span></span><br><span class="line">        onDraw(canvas);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 4, draw the children</span></span><br><span class="line">        dispatchDraw(canvas);</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 6, draw decorations (foreground, scrollbars)</span></span><br><span class="line">        onDrawForeground(canvas);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所有的视图最终都会调用 View 的这个 <code>draw(canvas)</code> 方法绘制，在自定义 View 时，应该复写 <code>onDraw(canvas)</code> 方法实现绘制，如果说要复写这个方法应该先调用 <code>super.draw(canvas)</code> 完成系统的绘制，然后再进行自定义的 draw 方法来绘制。</p>
+<p>更具体的源码分析可以看看<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cloud.tencent.com/developer/article/1442922"
+                      alt="这篇文章"
+                ></p>
+<p>绘制流程图：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://upload-images.jianshu.io/upload_images/3985563-594f6b3cde8762c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/939/format/webp"
+                     
+                ></p>
+<h2 id="自定义-View"><a href="#自定义-View" class="headerlink" title="自定义 View"></a>自定义 View</h2><p>我们在自定义 View 的时候需要根据自定义不同的 View 来分别实现不同的方法：<code>onMeasure()</code>, <code>onLayout()</code>, <code>onDraw()</code>。</p>
+<h3 id="onMeasure"><a href="#onMeasure" class="headerlink" title="onMeasure()"></a>onMeasure()</h3><ul>
+<li>对于View，一般重写此方法，针对 wrap_content 情况，规定 View 默认的大小值，避免和 match_parent 情况一致。</li>
+<li>对于 ViewGroup，若不重写，就会执行和单一 View 中相同逻辑，不会测量子 View。一般会重写 <code>onMeasure()</code> 方法，循环测量子 View。</li>
+</ul>
+<h3 id="onLayout"><a href="#onLayout" class="headerlink" title="onLayout()"></a>onLayout()</h3><ul>
+<li>对于 View，不需要实现该方法。</li>
+<li>对于 ViewGroup 必须实现，该方法是个抽象方法，实现该方法，来对子 View 进行布局。</li>
+</ul>
+<h3 id="onDraw"><a href="#onDraw" class="headerlink" title="onDraw()"></a>onDraw()</h3><p>无论 View 或是 ViewGroup 都需要实现该方法进行绘制。</p>
+<hr>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/8766babc40e0" >简析Window、Activity、DecorView以及ViewRoot之间的错综关系<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/3d2c49315d68" >图解View测量、布局及绘制原理<i class="fas fa-external-link-alt"></i></a></p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                .article-copyright-info-container {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 6px;
+  font-size: 1rem;
+  background: var(--second-background-color);
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+    width: 6px;
+    height: 100%;
+    background: var(--copyright-info-color);
+  }
+
+
+  ul {
+
+    margin-left: 10px;
+
+    li {
+      margin-bottom: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--default-text-color);
+
+      .license {
+        font-weight: bold;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+            </div>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/05/10/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97-PriorityQueue/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">优先级队列 PriorityQueue</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+            <div class="comment-container">
+                <div class="comments-container">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments">&nbsp;Comments</i>
+    </div>
+    
+
+        
+            
+    <div id="gitalk-container"></div>
+    <script data-pjax
+            src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+    <script data-pjax>
+
+        function loadGitalk() {
+            let __gitalk__pathname = decodeURI(location.pathname);
+            const __gitalk__pathnameLength = __gitalk__pathname.length;
+            const __gitalk__pathnameMaxLength = 50;
+            if (__gitalk__pathnameLength > __gitalk__pathnameMaxLength) {
+                __gitalk__pathname = __gitalk__pathname.substring(0, __gitalk__pathnameMaxLength - 3) + '...';
+            }
+
+            try {
+                Gitalk && new Gitalk({
+                    clientID: 'da967ebea44c9dcf76ec',
+                    clientSecret: '67ff00f5fe07e4d119db4b7567b3db6a26794874',
+                    repo: 'gitalk',
+                    owner: 'NeeoMacLynch',
+                    admin: ['NeeoMacLynch'],
+                    id: __gitalk__pathname,
+                    language: 'en'
+                }).render('gitalk-container');
+
+            } catch (e) {
+                window.Gitalk = null;
+            }
+        }
+
+        if ('true') {
+            const loadGitalkTimeout = setTimeout(() => {
+                loadGitalk();
+                clearTimeout(loadGitalkTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadGitalk);
+        }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>&nbsp;-&nbsp;
+            
+            2021&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Lynch Lee</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.2</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">基础知识储备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity"><span class="nav-number">1.1.</span> <span class="nav-text">Activity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Window"><span class="nav-number">1.2.</span> <span class="nav-text">Window</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DecorView"><span class="nav-number">1.3.</span> <span class="nav-text">DecorView</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewRoot"><span class="nav-number">1.4.</span> <span class="nav-text">ViewRoot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">绘制的基础框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Measure-%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">Measure 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MeasureSpec"><span class="nav-number">3.1.</span> <span class="nav-text">MeasureSpec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Layout-%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">Layout 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Draw-%E6%B5%81%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">Draw 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-View"><span class="nav-number">6.</span> <span class="nav-text">自定义 View</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onMeasure"><span class="nav-number">6.1.</span> <span class="nav-text">onMeasure()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onLayout"><span class="nav-number">6.2.</span> <span class="nav-text">onLayout()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onDraw"><span class="nav-number">6.3.</span> <span class="nav-text">onDraw()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5%EF%BC%9A"><span class="nav-number">7.</span> <span class="nav-text">参考链接：</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/dark-light-toggle.js"></script>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/local-search.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/code-copy.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/lazyload.js"></script>
+
+
+<div class="post-scripts pjax">
+    
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/left-side-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/libs/anime.min.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/toc.js"></script>
+    
+</div>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            KEEP.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
