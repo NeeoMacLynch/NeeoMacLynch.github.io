@@ -21,7 +21,7 @@
     <script id="hexo-configurations">
     let KEEP = window.KEEP || {};
     KEEP.hexo_config = {"hostname":"neeomaclynch.github.io","root":"/","language":"en","path":"search.json"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"../images/avatar.png","favicon":"../images/favicon.ico","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Work-Life balance."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":true},"lazyload":{"enable":false},"version":"3.4.2"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":false,"init_open":false},"style":{"primary_color":"#0066CC","avatar":"../images/avatar.png","favicon":"../images/favicon.ico","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"Work-Life balance."},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"mac"},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"3.4.2"};
     KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
   </script>
 <meta name="generator" content="Hexo 5.4.0"></head>
@@ -246,20 +246,35 @@
 <span id="more"></span>
 
 <h2 id="基础知识储备"><a href="#基础知识储备" class="headerlink" title="基础知识储备"></a>基础知识储备</h2><p>我们先来看几张图，首先是 Activity 视图架构图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/Activity%E7%BB%93%E6%9E%84.62qkqslm8h80.svg"></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/Activity%E7%BB%93%E6%9E%84.62qkqslm8h80.svg"
+                     
+                ></p>
 <h3 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h3><p>Activity 不负责控制视图，它只负责控制生命周期并处理消息事件。控制视图的工作是由 Window 来完成的。一个 Activity 包含一个 Window ，Window 才是真正代表一个窗口，<strong>Activity 可以看作是这个窗口的控制器，负责视图的添加和现实，并通过其他回调方法，与 Window 及 View 进行交互</strong></p>
 <h3 id="Window"><a href="#Window" class="headerlink" title="Window"></a>Window</h3><p>Window 是视图的容器，其中持有一个 DecorView，DecorView 是 View 的根布局。Window 是一个抽象类，实际上 Activity 持有的是 <code>PhoneWindow</code> <code>这个子类。PhoneWindow</code> 中有一个内部类 <code>DecorView</code> ，通过创建 <code>DecorView</code> 来加载 Activity 中编写的 XML 布局。Window 通过 WindowManager 将 <code>DecorView</code> 加载到其中，并将 <code>DecorView</code> 交给 ViewRoot，进行视图绘制以及其他交互。</p>
 <h3 id="DecorView"><a href="#DecorView" class="headerlink" title="DecorView"></a>DecorView</h3><p><code>DecorView</code> 是 <code>FrameLayout</code> 的子类，它是 Android 视图树的根节点视图。其作为顶级 View，一般情况下内部包含一个垂直布局的 LinearLayout，这里简单来说有两个部分：一是标题栏；二是内容栏， 通过 setContentView 设置到其中，一般通过代码获取的 <code>content</code> 就是这里的 id 为 content 的 <code>FrameLayout</code>（这里 LinearLayout 中具体有些什么还是取决于系统版本）。</p>
 <h3 id="ViewRoot"><a href="#ViewRoot" class="headerlink" title="ViewRoot"></a>ViewRoot</h3><p>ViewRoot 的作用非常重要，这里的 <em>View 绘制</em> 和后面会提到的 <em>事件分发机制</em> 都是经由它来执行或者传递的。</p>
 <p>ViewRoot 对应 <code>ViewRootImpl</code> 类，它是连接 <code>WindowManagerService</code> 和 <code>DecorView</code> 的纽带，View 绘制的三大流程，即测量(measure)，布局(layout)，绘制(draw)都是由 ViewRoot 来完成。</p>
 <p>ViewRoot 不属于视图树的一部分。从源码上看，其既不是 <code>View</code> 的子类，也不是 <code>View</code> 的父类，但是它实现了 <code>ViewParent</code> 接口，所以还是可以把它看作是 View 的父视图。RootView 中存在一个内部类变量继承了 <code>Handler</code> 类，因此可以接收并分发事件，Android 中所有的触摸、按键、界面刷新事件都是由它进行分发的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/DecorView%E4%B8%8E%E5%85%B6%E4%BB%96%E5%87%A0%E4%BD%8D%E7%9A%84%E5%85%B3%E7%B3%BB.5uk2j8d14w80.png" alt="四者之间的复杂关系"></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/DecorView%E4%B8%8E%E5%85%B6%E4%BB%96%E5%87%A0%E4%BD%8D%E7%9A%84%E5%85%B3%E7%B3%BB.5uk2j8d14w80.png"
+                      alt="四者之间的复杂关系"
+                ></p>
 <p>DecorView 的源码我们暂且不细说了（我不会说是我还没看明白）。</p>
 <p>这里最后提一下 ViewRoot 对点击事件的分发，整个过程大致是：</p>
 <p>硬件 &rarr; ViewRootImpl &rarr; DecorView &rarr; PhoneWindow &rarr; Activity</p>
 <p>再往下就是 Android 的事件分发机制了，我们会在下篇文章中再来细说这部分。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>Activity 是控制器，负责控制 View 的生命周期并处理事件；Window 是 VIew 的容器；DecorView 是顶级View；ViewRoot 是连接器，连接用户与软件，是实现交互的桥梁。</p>
-<h2 id="绘制的基础框架"><a href="#绘制的基础框架" class="headerlink" title="绘制的基础框架"></a>绘制的基础框架</h2><p><img src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E7%BB%98%E5%88%B6%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6.6yw4ab3ukl40.png"></p>
+<h2 id="绘制的基础框架"><a href="#绘制的基础框架" class="headerlink" title="绘制的基础框架"></a>绘制的基础框架</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E7%BB%98%E5%88%B6%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6.6yw4ab3ukl40.png"
+                     
+                ></p>
 <p>View 绘制的顺序是 <code>DecorView</code> &rarr; <code>ViewGroup</code> * N &rarr; <code>View</code>，按照这个顺序依次往下，进行 measure（测量） &rarr; layout（布局） &rarr; draw（绘制）</p>
 <h2 id="Measure-流程"><a href="#Measure-流程" class="headerlink" title="Measure 流程"></a>Measure 流程</h2><p><strong>测量每个组件的大小</strong></p>
 <p>在 <code>measure()</code> 方法中对租价尺寸进行一下逻辑处理后，再调用 <code>onMeasure()</code> 方法通过 <code>setMeasuredDimension()</code> 设定 View 的尺寸信息，完成 View 的测量工作。</p>
@@ -278,7 +293,12 @@
 <p>对于其他 View 包括 ViewGroup 则是通过父布局的 MeasureSpec 和自身 LayoutParams 确定，这部分比较复杂，简单来说就是设定为 wrap_content 时 View 的大小不能超过父布局，因此需要重写 <code>onMeasure()</code> 方法处理这个情况。</p>
 <p>更具体的解析可以看看<a class="link"   target="_blank" rel="noopener" href="https://www.jianshu.com/p/1dab927b2f36" >大佬的文章<i class="fas fa-external-link-alt"></i></a></p>
 <p>测量流程图（我真的不想画图了，那天有空了再复刻一个自己版本，就借用大佬的图吧）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E6%B5%8B%E9%87%8F%E6%B5%81%E7%A8%8B%E5%9B%BE.4n96s0feera0.png"></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E6%B5%8B%E9%87%8F%E6%B5%81%E7%A8%8B%E5%9B%BE.4n96s0feera0.png"
+                     
+                ></p>
 <p>这里要注意的是：ViewGroup 的测量是依赖于 View 的测量的，因为 ViewGroup 中是没有 <code>onMeasure()</code> 方法的，它的 <code>onMeasure()</code> 是一个抽象方法，需要每个子 View 根据自己的布局特性去实现。</p>
 <h2 id="Layout-流程"><a href="#Layout-流程" class="headerlink" title="Layout 流程"></a>Layout 流程</h2><p>测量完 View 后，就需要将其 <strong>布局</strong> 到 Window 上，Layout 主要是通过确定上下左右四个点来确定位置。</p>
 <p>Layout 也是从父容器到子组件的顺序，不同的是 <font color=red>ViewGroup 先在 <code>layout()</code> 中确定自己的布局，然后在 <code>onLayout()</code> 方法中再调用子 View 的 <code>layout()</code> 方法，让子 View Layout 出来</font>。在 Measure 过程中，就如上面一节提到的，ViewGroup 一般是先测量子 View 的大小，然后再确定自身的大小。</p>
@@ -286,7 +306,12 @@
 
 <p>其中 <code>onLayout()</code> 是一个空方法，只有当前 View 有子 View （即 ViewGroup）时才要实现这个方法，特别是自定义 View 时需要通过重写这个方法实现特定的效果。</p>
 <p>布局流程图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E5%B8%83%E5%B1%80%E6%B5%81%E7%A8%8B%E5%9B%BE.uwnqbz983xs.png"></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E5%B8%83%E5%B1%80%E6%B5%81%E7%A8%8B%E5%9B%BE.uwnqbz983xs.png"
+                     
+                ></p>
 <h2 id="Draw-流程"><a href="#Draw-流程" class="headerlink" title="Draw 流程"></a>Draw 流程</h2><p>绘制的过程如下：</p>
 <ol>
 <li>绘制背景 <code>drawBackground(canvas)</code></li>
@@ -298,7 +323,12 @@
 <p>所有的视图最终都会调用 View 的这个 <code>draw(canvas)</code> 方法绘制，在自定义 View 时，应该复写 <code>onDraw(canvas)</code> 方法实现绘制，如果说要复写这个方法应该先调用 <code>super.draw(canvas)</code> 完成系统的绘制，然后再进行自定义的 draw 方法来绘制。</p>
 <p>更具体的源码分析可以看看<a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1442922" >这篇文章<i class="fas fa-external-link-alt"></i></a></p>
 <p>绘制流程图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE.41wvg9am1z20.png"></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE.41wvg9am1z20.png"
+                     
+                ></p>
 <h2 id="自定义-View"><a href="#自定义-View" class="headerlink" title="自定义 View"></a>自定义 View</h2><p>我们在自定义 View 的时候需要根据自定义不同的 View 来分别实现不同的方法：<code>onMeasure()</code>, <code>onLayout()</code>, <code>onDraw()</code>。</p>
 <h3 id="onMeasure"><a href="#onMeasure" class="headerlink" title="onMeasure()"></a>onMeasure()</h3><ul>
 <li>对于View，一般重写此方法，针对 wrap_content 情况，规定 View 默认的大小值，避免和 match_parent 情况一致。</li>
@@ -584,6 +614,8 @@
     <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/code-copy.js"></script>
 
 
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.4.2/source/js/lazyload.js"></script>
 
 
 <div class="post-scripts pjax">
