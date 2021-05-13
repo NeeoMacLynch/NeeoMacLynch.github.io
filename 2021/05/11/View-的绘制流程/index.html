@@ -261,7 +261,7 @@
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://upload-images.jianshu.io/upload_images/3985563-e773ab2cb83ad214.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/690/format/webp"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/DecorView%E4%B8%8E%E5%85%B6%E4%BB%96%E5%87%A0%E4%BD%8D%E7%9A%84%E5%85%B3%E7%B3%BB.5uk2j8d14w80.png"
                       alt="四者之间的复杂关系"
                 ></p>
 <p>DecorView 的源码我们暂且不细说了（我不会说是我还没看明白）。</p>
@@ -272,7 +272,7 @@
 <h2 id="绘制的基础框架"><a href="#绘制的基础框架" class="headerlink" title="绘制的基础框架"></a>绘制的基础框架</h2><p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://upload-images.jianshu.io/upload_images/3985563-5f3c64af676d9aee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/679/format/webp"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E7%BB%98%E5%88%B6%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6.6yw4ab3ukl40.png"
                      
                 ></p>
 <p>View 绘制的顺序是 <code>DecorView</code> &rarr; <code>ViewGroup</code> * N &rarr; <code>View</code>，按照这个顺序依次往下，进行 measure（测量） &rarr; layout（布局） &rarr; draw（绘制）</p>
@@ -296,7 +296,7 @@
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://upload-images.jianshu.io/upload_images/3985563-d1a57294428ff668.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/814/format/webp"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E6%B5%8B%E9%87%8F%E6%B5%81%E7%A8%8B%E5%9B%BE.4n96s0feera0.png"
                      
                 ></p>
 <p>这里要注意的是：ViewGroup 的测量是依赖于 View 的测量的，因为 ViewGroup 中是没有 <code>onMeasure()</code> 方法的，它的 <code>onMeasure()</code> 是一个抽象方法，需要每个子 View 根据自己的布局特性去实现。</p>
@@ -309,7 +309,7 @@
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://upload-images.jianshu.io/upload_images/3985563-8aefac42b3912539.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1019/format/webp"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E5%B8%83%E5%B1%80%E6%B5%81%E7%A8%8B%E5%9B%BE.uwnqbz983xs.png"
                      
                 ></p>
 <h2 id="Draw-流程"><a href="#Draw-流程" class="headerlink" title="Draw 流程"></a>Draw 流程</h2><p>绘制的过程如下：</p>
@@ -321,17 +321,12 @@
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    drawBackground(canvas);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果有必要，就保存图层（还有一个复原图层）</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> viewFlags = mViewFlags;</span><br><span class="line">    <span class="keyword">boolean</span> horizontalEdges = (viewFlags &amp; FADING_EDGE_HORIZONTAL) != <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> verticalEdges = (viewFlags &amp; FADING_EDGE_VERTICAL) != <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (!verticalEdges &amp;&amp; !horizontalEdges) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 3, draw the content</span></span><br><span class="line">        onDraw(canvas);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 4, draw the children</span></span><br><span class="line">        dispatchDraw(canvas);</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 6, draw decorations (foreground, scrollbars)</span></span><br><span class="line">        onDrawForeground(canvas);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>所有的视图最终都会调用 View 的这个 <code>draw(canvas)</code> 方法绘制，在自定义 View 时，应该复写 <code>onDraw(canvas)</code> 方法实现绘制，如果说要复写这个方法应该先调用 <code>super.draw(canvas)</code> 完成系统的绘制，然后再进行自定义的 draw 方法来绘制。</p>
-<p>更具体的源码分析可以看看<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://cloud.tencent.com/developer/article/1442922"
-                      alt="这篇文章"
-                ></p>
+<p>更具体的源码分析可以看看<a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1442922" >这篇文章<i class="fas fa-external-link-alt"></i></a></p>
 <p>绘制流程图：</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://upload-images.jianshu.io/upload_images/3985563-594f6b3cde8762c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/939/format/webp"
+                     data-src="https://cdn.jsdelivr.net/gh/NeeoMacLynch/image-hosting@master/%E6%8A%80%E6%9C%AF/%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE.41wvg9am1z20.png"
                      
                 ></p>
 <h2 id="自定义-View"><a href="#自定义-View" class="headerlink" title="自定义 View"></a>自定义 View</h2><p>我们在自定义 View 的时候需要根据自定义不同的 View 来分别实现不同的方法：<code>onMeasure()</code>, <code>onLayout()</code>, <code>onDraw()</code>。</p>
@@ -352,46 +347,19 @@
 
         
             <div class="post-copyright-info">
-                .article-copyright-info-container {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 6px;
-  font-size: 1rem;
-  background: var(--second-background-color);
-
-  &::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    content: '';
-    width: 6px;
-    height: 100%;
-    background: var(--copyright-info-color);
-  }
-
-
-  ul {
-
-    margin-left: 10px;
-
-    li {
-      margin-bottom: 5px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      color: var(--default-text-color);
-
-      .license {
-        font-weight: bold;
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-}
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：View 的绘制流程</li>
+        <li>Post author：Lynch Lee</li>
+        <li>Create time：2021-05-11 16:40:38</li>
+        <li>
+            Post link：https://neeomaclynch.github.io/2021/05/11/View-的绘制流程/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
 
             </div>
         
